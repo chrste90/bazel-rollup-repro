@@ -1,0 +1,25 @@
+filegroup(
+    name = "node_modules",
+    srcs = glob(
+        ["node_modules/**"]
+    ),
+    visibility = ["//visibility:public"],
+)
+
+load("@build_bazel_rules_typescript//:defs.bzl", "ts_library")
+load("@build_bazel_rules_nodejs//:defs.bzl", "rollup_bundle")
+
+ts_library(
+    name = "app",
+    srcs = ["src/app.ts"],
+    node_modules = ":node_modules",
+    tsconfig = ":tsconfig.json"
+)
+
+rollup_bundle(
+    name = "app_bundle",
+    entry_point = "src/app.js",
+    deps = [":app"],
+    node_modules = ":node_modules"
+)
+
